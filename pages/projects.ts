@@ -96,17 +96,15 @@ function clear(element) {
 
 export function redraw() {
 	clear(table);
-	for (var r in repoarray) {
-		var project = repoarray[r];
-
-		if (!project.available && config.hideUnavailable()) continue;
+	repoarray.forEach((project) => {
+		if (!project.available && config.hideUnavailable()) return;
 
 		var tr = document.createElement("tr");
 
 		var td = document.createElement("td");
 		td.appendChild(document.createTextNode(project.name));
 		tr.appendChild(td);
-		
+
 		td = document.createElement("td");
 		var button = null;
 		if (project.available) {
@@ -126,12 +124,12 @@ export function redraw() {
 			projectPage.load(project.name);
 		};
 
-		button.element.onclick = function() {
+		button.element.onclick = function () {
 			document.getElementById("kitt").style.visibility = "visible";
 			kittanimated = true;
 			animate();
 			git.update(project, projects, config.projectsDirectory() + "/",
-				function() {
+				function () {
 					document.getElementById("kitt").style.visibility = "hidden";
 					kittanimated = false;
 					button.element.removeChild(button.element.lastChild);
@@ -146,8 +144,8 @@ export function redraw() {
 		tr.appendChild(td);
 
 		table.appendChild(tr);
-	}
-};
+	});
+}
 
 function addProjects() {
 	repoarray = [];
@@ -156,7 +154,7 @@ function addProjects() {
 	}
 	repoarray.sort(function (a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1; });
 
-	exports.redraw();
+	redraw();
 }
 
 var serverCount;

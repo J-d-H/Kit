@@ -83,11 +83,9 @@ function clear(element) {
 
 function redraw() {
     clear(table);
-    for (var r in repoarray) {
-        var project = repoarray[r];
-
+    repoarray.forEach(function (project) {
         if (!project.available && config.hideUnavailable())
-            continue;
+            return;
 
         var tr = document.createElement("tr");
 
@@ -132,10 +130,9 @@ function redraw() {
         tr.appendChild(td);
 
         table.appendChild(tr);
-    }
+    });
 }
 exports.redraw = redraw;
-;
 
 function addProjects() {
     repoarray = [];

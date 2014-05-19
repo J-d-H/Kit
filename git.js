@@ -138,8 +138,7 @@ function clone(repo, repos, branch, baseurl, dir, subdir, projectsDir, specials,
                     if (baseurl !== null) {
                         baseurl += subdir + '/';
                     }
-                    for (var s in submodules) {
-                        var submodule = submodules[s];
+                    submodules.forEach(function (submodule) {
                         var url = submodule.url.substr(3);
                         if (repo.name !== undefined && repo.name.lastIndexOf('/') !== -1) {
                             url = repo.name.substr(0, repo.name.lastIndexOf('/')) + '/' + url;
@@ -170,7 +169,7 @@ function clone(repo, repos, branch, baseurl, dir, subdir, projectsDir, specials,
                                 }
                             });
                         }
-                    }
+                    });
                 });
             });
         });
@@ -185,8 +184,7 @@ function pull(projectsDir, dir, specials, callback) {
                 return;
             }
             var subcount = submodules.length;
-            for (var s in submodules) {
-                var submodule = submodules[s];
+            submodules.forEach(function (submodule) {
                 var url = submodule.url.substr(3);
                 if (specials && isSpecial(url)) {
                     pull(projectsDir, projectsDir + url, false, function () {
@@ -205,7 +203,7 @@ function pull(projectsDir, dir, specials, callback) {
                         }
                     });
                 }
-            }
+            });
         });
     });
 }

@@ -49,6 +49,7 @@ div.center {
 div.content {
 	height: 100%;
 	overflow: auto;
+	padding: 0 4px 0 4px;
 }
 
 div.bottom {
@@ -99,4 +100,51 @@ button:disabled {
 
 button:enabled:hover {
 	background-image: linear-gradient(to bottom, rgb(87, 89, 92) 0%, rgb(74, 75, 78) 5%, rgb(64, 64, 64) 10%, rgb(32, 32, 32) 95%, rgb(5, 5, 5) 100%);
+}
+
+
+select.custom-select {
+	-webkit-appearance: none;
+	border: 1px solid rgb(156, 162, 167);
+	border-radius: 3px;
+	font-size: 12px;
+	font-family:arial;
+	padding: 2px 15px 2px 2px;
+	margin-right: -16px;
+	text-decoration: none;
+	display: inline-block;
+	color: rgb(216, 222, 227);
+	background-color: rgb(32, 32, 32);
+}
+
+select.custom-select:enabled:hover {
+	border-color: rgb(216, 222, 227);
+}
+select.custom-select:disabled {
+	color: rgb(156, 162, 167);
+	border-color: rgb(87, 89, 92);
+}
+
+select.custom-select + label:before {
+	content: '\25bc';
+	font-size: 9px;
+	font-family: arial;
+	text-align: right;
+	position: relative;
+	display: inline-block;
+	bottom: 1px;
+	width: 11px;
+	padding: 5px 0 5px 0;
+	pointer-events: none;
+	color: rgb(156, 162, 167);
+	border-left: solid 1px rgb(156, 162, 167);
+}
+
+select.custom-select:enabled:hover + label:before {
+	color: rgb(216, 222, 227);
+	border-color: rgb(216, 222, 227);
+}
+select.custom-select:disabled + label:before {
+	color: rgb(87, 89, 92);
+	border-color: rgb(87, 89, 92);
 }

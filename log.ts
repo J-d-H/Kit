@@ -9,12 +9,12 @@ export function init(logButton: HTMLButtonElement) {
 }
 
 export function info(text: string) {
-	exports.lines.push({ level: 0, text: text });
+	lines.push({ level: 0, text: text });
 	logPage.update();
 };
 
 export function error(text: string) {
 	button.className = 'alert';
-	exports.lines.push({ level: 1, text: text });
+	lines.push({ level: 1, text: text });
 	logPage.update();
 };

@@ -11,6 +11,18 @@ import configPage = require("./pages/config");
 import logPage = require("./pages/log");
 
 window.onload = function() {
+	var logButton = <HTMLButtonElement>document.getElementById('logButton');
+	log.init(logButton);
+	logPage.init(logButton);
+	logButton.onclick = logPage.load;
+
+	window.addEventListener("error", function (ev: ErrorEvent) {
+		log.error(ev.error.stack);
+	});
+	process.addListener('uncaughtException', function (error) {
+		log.error("Uncaught Exception: " + error);
+	});
+
 	var gui = require('nw.gui');
 	document.getElementById('reloadButton').onclick = function () {
 		gui.Window.get().reload(3);
@@ -19,16 +31,11 @@ window.onload = function() {
 		gui.Window.get().showDevTools();
 	};
 
-	var logButton = <HTMLButtonElement>document.getElementById('logButton');
-	log.init(logButton);
-	logPage.init(logButton);
-
 	config.init(gui.App.dataPath);
 	if (config.projectsDirectory() === null) configPage.load();
 	else projectsPage.load();
 	document.getElementById("projectsButton").onclick = projectsPage.load;
 	document.getElementById("configButton").onclick = configPage.load;
-	logButton.onclick = logPage.load;
 	var hidespan = <HTMLSpanElement>document.getElementById('hideunavailable');
 	var hidebox = <HTMLInputElement>document.getElementById('hideunavailablebox');
 	if (config.hideUnavailable()) hidebox.click();

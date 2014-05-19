@@ -16,29 +16,28 @@ function remove(array, at) {
 	return array.push.apply(array, rest);
 }
 
-function loadAssets(kha, assets, type, element) {
+function loadAssets(kha, assets: any[], type, element) {
 	clear(element);
 	var table = document.createElement("table");
-	for (var asset in assets) {
-		var current = assets[asset];
-		if (assets[asset].type === type) {
+	assets.forEach((current) => {
+		if (current.type === type) {
 			var tr = document.createElement("tr");
 			var td = document.createElement("td");
 
 			var a = document.createElement("a");
 			a.setAttribute("href", "#");
-			a.onclick = function() {
+			a.onclick = function () {
 				//window.alert("click");
 				return false;
 			};
-			a.appendChild(document.createTextNode(assets[asset].name));
+			a.appendChild(document.createTextNode(current.name));
 			td.appendChild(a);
 			tr.appendChild(td);
 
 			td = document.createElement("td");
 			var button = document.createElement("button");
 			button.appendChild(document.createTextNode("-"));
-			button.onclick = function() {
+			button.onclick = function () {
 				for (var asset in assets) {
 					if (assets[asset].type === type && assets[asset].name === current.name) {
 						remove(assets, assets.indexOf(assets[asset]));
@@ -52,7 +51,7 @@ function loadAssets(kha, assets, type, element) {
 			tr.appendChild(td);
 			table.appendChild(tr);
 		}
-	}
+	});
 	element.appendChild(table);
 }
 

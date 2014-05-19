@@ -21,7 +21,11 @@ export function init(logButton) {
 export function update() {
 	if (table === null) return;
 	for (var row = lastIndex; row < log.lines.length; ++row) {
-		table.appendChild(createRow1(document.createTextNode(log.lines[row].text)));
+		var pre = document.createElement("pre");
+		pre.style.margin = "0";
+		pre.style.padding = "0";
+		pre.appendChild(document.createTextNode(log.lines[row].text));
+		table.appendChild(createRow1(pre));
 	}
 	lastIndex = log.lines.length;
 };
@@ -31,10 +35,8 @@ export function load() {
 	page.clear();
 	table = document.createElement("table");
 
-	for (var row in log.lines) {
-		table.appendChild(createRow1(document.createTextNode(log.lines[row].text)));
-	}
-	lastIndex = log.lines.length;
+	lastIndex = 0;
+	update();
 
 	var content = document.getElementById("content");
 	content.appendChild(table);

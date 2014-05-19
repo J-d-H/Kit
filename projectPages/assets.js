@@ -19,9 +19,8 @@ function remove(array, at) {
 function loadAssets(kha, assets, type, element) {
     clear(element);
     var table = document.createElement("table");
-    for (var asset in assets) {
-        var current = assets[asset];
-        if (assets[asset].type === type) {
+    assets.forEach(function (current) {
+        if (current.type === type) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
 
@@ -31,7 +30,7 @@ function loadAssets(kha, assets, type, element) {
                 //window.alert("click");
                 return false;
             };
-            a.appendChild(document.createTextNode(assets[asset].name));
+            a.appendChild(document.createTextNode(current.name));
             td.appendChild(a);
             tr.appendChild(td);
 
@@ -52,7 +51,7 @@ function loadAssets(kha, assets, type, element) {
             tr.appendChild(td);
             table.appendChild(tr);
         }
-    }
+    });
     element.appendChild(table);
 }
 
