@@ -1,9 +1,11 @@
-function clear(element) {
-	while (element.lastChild) {
-		element.removeChild(element.lastChild);
-	}
+function clearElement(element) {
+    while (element.lastChild) {
+        element.removeChild(element.lastChild);
+    }
 }
 
-exports.clear = function() {
-	clear(window.document.getElementById("content"));
+function clear() {
+    clearElement(window.document.getElementById("content"));
 }
+exports.clear = clear;
+//# sourceMappingURL=Kit/../page.js.map

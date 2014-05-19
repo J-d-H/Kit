@@ -1,130 +1,141 @@
-var fs      = require('fs');
-var path    = require('path');
+﻿var fs = require('fs');
+var path = require('path');
+var log = require('./log');
 
 var options = {
-	version: 1,
-	projectsDirectory: '',
-	mp3encoder: '',
-	aacencoder: '',
-	hideUnavailable: false,
-	git: 'git',
-	servers: [
-		{
-			name: 'ktx-github',
-			type: 'github',
-			path: 'orgs/ktxsoftware'
-		}
-		/*
-		{
-			"name": "ktx-gitblit"
-			"type": "gitblit",
-			"url": "git.ktxsoftware.com",
-			"user": "",
-			"pass": ""
-		}
-		*/
-	]
+    version: 1,
+    projectsDirectory: '',
+    mp3encoder: '',
+    aacencoder: '',
+    hideUnavailable: false,
+    git: 'git',
+    servers: [
+        {
+            name: 'ktx-github',
+            type: 'github',
+            path: 'orgs/ktxsoftware'
+        }
+    ]
 };
 
-var serverData = { };
+var _serverData = {};
 
-var optionsPath;
-var optionsFile;
+var optionsPath = '';
+var optionsFile = '';
 
 function load() {
-	try {
-		options = JSON.parse(fs.readFileSync(optionsFile, {encoding: 'utf8'}));
-		if (options.hideUnavailable === undefined) options.hideUnavailable = false;
-		if (options.git === undefined) options.git = 'git';
-		for (var s in options.servers) {
-			var server = options.servers[s];
-			if (server.name === undefined) server.name = 'ktx-github';
-		}
-	}
-	catch (e) {
-		var localStorage = window.localStorage;
-		options.projectsDirectory = localStorage.getItem('projectsDirectory');
-		options.mp3encoder = localStorage.getItem('mp3encoder');
-		options.aacencoder = localStorage.getItem('aacencoder');
-	}
-	for (var s in options.servers) {
-		var server = options.servers[s];
-		try {
-			serverData[server.name] = JSON.parse(fs.readFileSync(optionsPath + server.name + '.json', {encoding: 'utf8'}));
-		}
-		catch (e) {
-			serverData[server.name] = { etag: null, repositories: [] };
-		}
-	}
+    try  {
+        options = JSON.parse(fs.readFileSync(optionsFile, { encoding: 'utf8' }));
+        if (options.hideUnavailable === undefined)
+            options.hideUnavailable = false;
+        if (options.git === undefined)
+            options.git = 'git';
+        for (var s in options.servers) {
+            var server = options.servers[s];
+            if (server.name === undefined)
+                server.name = 'ktx-github';
+        }
+    } catch (e) {
+        var localStorage = window.localStorage;
+        options.projectsDirectory = localStorage.getItem('projectsDirectory');
+        options.mp3encoder = localStorage.getItem('mp3encoder');
+        options.aacencoder = localStorage.getItem('aacencoder');
+    }
+    for (var s in options.servers) {
+        var server = options.servers[s];
+        try  {
+            _serverData[server.name] = JSON.parse(fs.readFileSync(optionsPath + server.name + '.json', { encoding: 'utf8' }));
+        } catch (e) {
+            _serverData[server.name] = { etag: null, repositories: [] };
+        }
+    }
 }
 
 function save() {
-	fs.writeFile(optionsFile, JSON.stringify(options, null, '\t'), {encoding: 'utf8'}, function (err) {
-		// TODO: log error?
-	});
+    fs.writeFile(optionsFile, JSON.stringify(options, null, '\t'), { encoding: 'utf8' }, function (err) {
+        if (err) {
+            log.error('Error saving options: ' + err);
+        }
+    });
 }
+exports.save = save;
 
-exports.init = function (dataPath) {
-	optionsPath = dataPath + path.sep;
-	optionsFile = optionsPath + 'options.json';
-	load();
+function init(dataPath) {
+    optionsPath = dataPath + path.sep;
+    optionsFile = optionsPath + 'options.json';
+    load();
 }
+exports.init = init;
 
-exports.projectsDirectory = function () {
-	return options.projectsDirectory;
+function projectsDirectory() {
+    return options.projectsDirectory;
 }
+exports.projectsDirectory = projectsDirectory;
 
-exports.mp3Encoder = function () {
-	return options.mp3encoder;
+function mp3Encoder() {
+    return options.mp3encoder;
 }
+exports.mp3Encoder = mp3Encoder;
 
-exports.aacEncoder = function () {
-	return options.aacencoder;
+function aacEncoder() {
+    return options.aacencoder;
 }
+exports.aacEncoder = aacEncoder;
 
-exports.servers = function () {
-	return options.servers;
+function servers() {
+    return options.servers;
 }
+exports.servers = servers;
 
-exports.serverData = function (serverName) {
-	return serverData[serverName];
+function serverData(serverName) {
+    return _serverData[serverName];
 }
+exports.serverData = serverData;
 
-exports.hideUnavailable = function () {
-	return options.hideUnavailable;
+function hideUnavailable() {
+    return options.hideUnavailable;
 }
+exports.hideUnavailable = hideUnavailable;
 
-exports.git = function () {
-	return options.git;
+function git() {
+    return options.git;
 }
+exports.git = git;
 
-exports.setProjectsDirectory = function (dir) {
-	options.projectsDirectory = dir;
-	save();
+function setProjectsDirectory(dir) {
+    options.projectsDirectory = dir;
+    exports.save();
 }
+exports.setProjectsDirectory = setProjectsDirectory;
 
-exports.setMP3Encoder = function (text) {
-	options.mp3encoder = text;
-	save();
+function setMP3Encoder(text) {
+    options.mp3encoder = text;
+    exports.save();
 }
+exports.setMP3Encoder = setMP3Encoder;
 
-exports.setAACEncoder = function (text) {
-	options.aacencoder = text;
-	save();
+function setAACEncoder(text) {
+    options.aacencoder = text;
+    exports.save();
 }
+exports.setAACEncoder = setAACEncoder;
 
-exports.setHideUnavailable = function (hide) {
-	options.hideUnavailable = hide;
-	save();
+function setHideUnavailable(hide) {
+    options.hideUnavailable = hide;
+    exports.save();
 }
+exports.setHideUnavailable = setHideUnavailable;
 
-exports.setGit = function (git) {
-	options.git = git;
-	save();
+function setGit(git) {
+    options.git = git;
+    exports.save();
 }
+exports.setGit = setGit;
 
-exports.saveServerData = function (serverName) {
-	fs.writeFile(optionsPath + serverName + '.json', JSON.stringify(serverData[serverName], null, '\t'), {encoding: 'utf8'}, function (err) {
-		// TODO: log error?
-	});
+function saveServerData(serverName) {
+    fs.writeFile(optionsPath + serverName + '.json', JSON.stringify(_serverData[serverName], null, '\t'), { encoding: 'utf8' }, function (err) {
+        // TODO: log error?
+    });
 }
+exports.saveServerData = saveServerData;
+//# sourceMappingURL=Kit/../config.js.map

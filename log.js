@@ -1,20 +1,26 @@
-var logPage = require("./pages/log.js");
+var logPage = require("./pages/log");
 
 exports.lines = [];
 
 var button;
 
-exports.init = function (logButton) {
-	button = logButton;
-};
+function init(logButton) {
+    button = logButton;
+}
+exports.init = init;
 
-exports.info = function(text) {
-	exports.lines.push({ level: 0, text: text });
-	logPage.update();
-};
+function info(text) {
+    exports.lines.push({ level: 0, text: text });
+    logPage.update();
+}
+exports.info = info;
+;
 
-exports.error = function(text) {
-	button.className = 'alert';
-	exports.lines.push({ level: 1, text: text });
-	logPage.update();
-};
+function error(text) {
+    button.className = 'alert';
+    exports.lines.push({ level: 1, text: text });
+    logPage.update();
+}
+exports.error = error;
+;
+//# sourceMappingURL=Kit/../log.js.map
